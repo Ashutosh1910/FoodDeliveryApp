@@ -1,0 +1,42 @@
+{% extends 'base2.html' %}
+
+{% block content %}
+{% if seller_restraunt%}
+{% if pending_order_list %}
+  <div class="container mt-5">
+    <h1 class="mb-4">Pending Orders</h1>
+
+    
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Order No.</th>
+            <th>Ordered By</th>
+            <th>To Hostel</th>
+            <th>Room no.</th>
+            <th>Total Amount</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in pending_order_list %}
+            <tr>
+              <td>{{ order.pk }}</td>
+              <td><a href="{%url 'order-detail' order.pk %}">{{ order.of_student.bits_id }}({{ order.of_student.user.first_name}})</a></td>
+              <td>{{ order.of_student.hostel }}</td>
+              <td>{{order.of_student.room_no}}</td>
+              <td>{{ order.order_price }}</td>
+              
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="alert alert-info">No pending orders.</p>
+    
+  </div>{% endif %}
+
+ <p class="alert alert-info">Your restaurant is rated {{seller_restraunt.restraunt_rating_value}}/10</p>
+{%endif%}
+  {%endblock %}
+

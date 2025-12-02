@@ -1,0 +1,59 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1>Your Basket</h1>
+
+    {% if basket and basket.basket_item_set %}
+    <h1>{{basket.of_restraunt.restraunt_name}}</h1>
+      <table class="table mt-3">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total Price</th>
+            <th>Remove</th>
+            <th>Rate Item</th>
+            
+          </tr> 
+        </thead>
+        <form action='rate/{{basket.pk}}/' method="post">{%csrf_token%}
+        <tbody>
+          {% for item in basket.basket_item_set.all %}
+            <tr>
+              <td>{{ item.item_name }}</td>
+              <td>{{ item.item_quantity }}</td>
+              <td>${{ item.item_cost }}</td>
+             
+              <td>{{item.total_cost_item  }}</td>
+    
+          
+             
+              <td>
+                <a href="{%url 'remove-item' item.pk%}" class="btn btn-danger btn-sm">Remove</a>
+              </td>
+              <td> <input type="range" class="form-control-range" id="slider" name="slider{{item.pk}}" min="0" max="10" step="1">
+              </td>
+            </tr>
+          {% endfor %}
+
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3"></td>
+            <td>Total: ${{ basket.total_cost }}</td>
+            <td></td>
+            <td ><button type="submit" class="btn btn-info btn-sm">Rate</button></td></form>
+          </tr>
+        </tfoot>
+      </table>
+
+      <a href={%url 'place-order' %} class="btn btn-primary">Proceed to Checkout</a>
+    {% else %}
+      <p>Your cart is empty.</p>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base2.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1>Add Item to Restaurant</h1>
+
+    <form method="post" action="">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="{{ form.item_name.id_for_label }}">Item Name:</label>
+        {{ form.item_name }}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.item_price.id_for_label }}">Item Price:</label>
+        {{ form.item_price }}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.description.id_for_label }}">Description:</label>
+        {{ form.item_description }}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.description.id_for_label }}">Image</label>
+        {{ form.item_image }}
+      </div>
+
+      <!-- Add more form fields as needed -->
+
+      <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+  </div>
+{% endblock %}

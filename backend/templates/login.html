@@ -1,0 +1,21 @@
+{% extends "base2.html" %}
+{% block content %}
+<div class="container mt-5">
+    <legend>
+        <div class="content-section" style="background-color: blue;">
+            <fieldset class="text-center border p-4" style="max-width: 400px; margin: 0 auto; background-color: white;">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary mt-3">Login</button>
+                </form>
+            </fieldset>
+            <div class="text-center mt-3">
+                <small>NEW SELLER? <a href="{% url 'seller-form' %}">Sign Up</a></small>
+            </div>
+        </div>
+    </legend>
+</div>
+{% endblock %}
+
+             
