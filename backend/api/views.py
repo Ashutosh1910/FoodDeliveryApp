@@ -244,15 +244,34 @@ class RestrauntViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'])
     def my_restaurant(self, request):
-        """Get current seller's restaurant"""
+        """Get current seller's first restaurant (for backward compatibility)"""
         try:
             seller_profile = Seller_Profile.objects.get(user=request.user)
-            restaurant = Restraunt.objects.get(of_seller=seller_profile)
-            serializer = self.get_serializer(restaurant)
-            return Response(serializer.data)
-        except (Seller_Profile.DoesNotExist, Restraunt.DoesNotExist):
+            restaurant = Restraunt.objects.filter(of_seller=seller_profile).first()
+            if restaurant:
+                serializer = self.get_serializer(restaurant)
+                return Response(serializer.data)
             return Response(
-                {'error': 'Restaurant not found'},
+                {'error': 'No restaurant found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Seller_Profile.DoesNotExist:
+            return Response(
+                {'error': 'Seller profile not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+    
+    @action(detail=False, methods=['get'])
+    def my_restaurants(self, request):
+        """Get all restaurants owned by current seller"""
+        try:
+            seller_profile = Seller_Profile.objects.get(user=request.user)
+            restaurants = Restraunt.objects.filter(of_seller=seller_profile)
+            serializer = self.get_serializer(restaurants, many=True)
+            return Response(serializer.data)
+        except Seller_Profile.DoesNotExist:
+            return Response(
+                {'error': 'Seller profile not found'},
                 status=status.HTTP_404_NOT_FOUND
             )
 
@@ -278,26 +297,48 @@ class ItemViewSet(viewsets.ModelViewSet):
         return queryset
     
     def perform_create(self, serializer):
-        # Create item for seller's restaurant
+        # Create item for specified restaurant or seller's first restaurant
+        restaurant_id = self.request.data.get('restaurant_id')
         try:
             seller_profile = Seller_Profile.objects.get(user=self.request.user)
-            restaurant = Restraunt.objects.get(of_seller=seller_profile)
+            if restaurant_id:
+                # Verify the restaurant belongs to the seller
+                restaurant = Restraunt.objects.get(id=restaurant_id, of_seller=seller_profile)
+            else:
+                # Default to first restaurant for backward compatibility
+                restaurant = Restraunt.objects.filter(of_seller=seller_profile).first()
+                if not restaurant:
+                    raise serializers.ValidationError("No restaurant found for this seller")
             serializer.save(of_restraunt=restaurant)
-        except (Seller_Profile.DoesNotExist, Restraunt.DoesNotExist):
-            raise serializers.ValidationError("Restaurant not found for this seller")
+        except Seller_Profile.DoesNotExist:
+            raise serializers.ValidationError("Seller profile not found")
+        except Restraunt.DoesNotExist:
+            raise serializers.ValidationError("Restaurant not found or doesn't belong to this seller")
     
     @action(detail=False, methods=['get'])
     def my_items(self, request):
-        """Get items for current seller's restaurant"""
+        """Get items for current seller's restaurants"""
+        restaurant_id = request.query_params.get('restaurant_id')
         try:
             seller_profile = Seller_Profile.objects.get(user=request.user)
-            restaurant = Restraunt.objects.get(of_seller=seller_profile)
-            items = Item.objects.filter(of_restraunt=restaurant)
+            if restaurant_id:
+                # Get items for specific restaurant
+                restaurant = Restraunt.objects.get(id=restaurant_id, of_seller=seller_profile)
+                items = Item.objects.filter(of_restraunt=restaurant)
+            else:
+                # Get items for all seller's restaurants
+                restaurants = Restraunt.objects.filter(of_seller=seller_profile)
+                items = Item.objects.filter(of_restraunt__in=restaurants)
             serializer = self.get_serializer(items, many=True)
             return Response(serializer.data)
-        except (Seller_Profile.DoesNotExist, Restraunt.DoesNotExist):
+        except Seller_Profile.DoesNotExist:
             return Response(
-                {'error': 'Restaurant not found'},
+                {'error': 'Seller profile not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Restraunt.DoesNotExist:
+            return Response(
+                {'error': 'Restaurant not found or doesn\'t belong to this seller'},
                 status=status.HTTP_404_NOT_FOUND
             )
 

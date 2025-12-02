@@ -12,9 +12,9 @@ class Seller_Profile(models.Model):
         return f'{self.user.first_name} {self.seller_phone_no}'
 
 class Restraunt(models.Model):
-    of_seller=models.OneToOneField(Seller_Profile,on_delete=models.CASCADE)
+    of_seller=models.ForeignKey(Seller_Profile,on_delete=models.CASCADE,related_name='restaurants')
     restraunt_name=models.CharField(max_length=15)
-    restraunt_rating_value=models.DecimalField(max_digits=3,decimal_places=1)
+    restraunt_rating_value=models.DecimalField(max_digits=3,decimal_places=1,default=5.0)
     def __str__(self):
         return f'{self.restraunt_name}  Rating:{self.restraunt_rating_value}'
 
