@@ -10,6 +10,8 @@ import RestaurantList from './pages/RestaurantList';
 import RestaurantDetail from './pages/RestaurantDetail';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
+import SellerRestaurants from './pages/SellerRestaurants';
+import SellerMenu from './pages/SellerMenu';
 import './App.css';
 
 // Protected Route Component
@@ -62,7 +64,13 @@ function AppContent() {
           } />
           
           <Route path="/seller/dashboard" element={
-            <SellerRoute><Orders /></SellerRoute>
+            <SellerRoute><SellerRestaurants /></SellerRoute>
+          } />
+          <Route path="/seller/restaurants" element={
+            <SellerRoute><SellerRestaurants /></SellerRoute>
+          } />
+          <Route path="/seller/menu/:restaurantId" element={
+            <SellerRoute><SellerMenu /></SellerRoute>
           } />
           <Route path="/seller/orders" element={
             <SellerRoute><Orders /></SellerRoute>

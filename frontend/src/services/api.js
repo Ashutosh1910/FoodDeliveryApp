@@ -87,6 +87,7 @@ export const restaurantAPI = {
   update: (id, data) => api.patch(`/restaurants/${id}/`, data),
   delete: (id) => api.delete(`/restaurants/${id}/`),
   getMyRestaurant: () => api.get('/restaurants/my_restaurant/'),
+  getMyRestaurants: () => api.get('/restaurants/my_restaurants/'),
 };
 
 // Menu Items endpoints
