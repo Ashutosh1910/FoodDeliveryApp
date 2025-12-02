@@ -1,0 +1,21 @@
+# Django core
+Django==4.2.9
+
+# Django REST Framework
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.1
+
+# CORS handling
+django-cors-headers==4.3.1
+
+# Django AllAuth (for social authentication)
+django-allauth==0.57.0
+
+# Image handling
+Pillow==10.1.0
+
+# Environment variables
+python-decouple==3.8
+
+# For API documentation (optional but recommended)
+drf-yasg==1.21.7

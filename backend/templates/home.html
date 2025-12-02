@@ -1,0 +1,43 @@
+{%extends 'base.html' %}
+{% load socialaccount %}
+{%block content%} 
+{%if user.is_authenticated%}
+{% if res_list %}
+    <div class="container mt-4">
+        <h2 class="mb-3">Restaurant List</h2>
+        {% for res in res_list %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{% url 'res-detail' res.pk %}">{{ res.restraunt_name }}</a>
+                    </h5>
+                    <p class="card-text">Rating: {{ res.restraunt_rating_value }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+{%else%}
+<div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+  <div class="border rounded p-3" style="background-color: lavender; height: 300px;">
+      <div class="text-center text-white" style="font-size: xx-large;">STUDENT LOGIN</div>
+
+      <figure class="text-center">
+          <blockquote class="blockquote">
+              <p><h1>Login with BitsMail</h1></p>
+          </blockquote>
+          <figcaption>
+              <a href="{% provider_login_url 'google' %}" class="btn btn-info"><h1>Login</h1></a>
+          </figcaption>
+      </figure>
+      
+      <div class="mt-3">
+          <a href="{% url 'seller-login' %}" class="text-black">Seller Login</a>
+      </div>
+  </div>
+</div>
+
+  {%endif%}
+  {%endblock%}

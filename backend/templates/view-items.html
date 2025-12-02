@@ -1,0 +1,24 @@
+{%extends 'base2.html'%}
+{%block content%}
+<div class="card-body">
+    <h2>Items Available</h2>
+    {% for item in item_list %}
+        <div class="mb-3">
+            <ul class="list-unstyled" style="background-color: palegoldenrod;">
+                <li>{{ item.item_name }}</li>
+                <li>Price: {{ item.item_price }}</li>
+                {% if item.item_image %}
+                <div class="mt-3">
+                    <img src="{{ item.item_image.url }}" alt="{{ item.item_name }}" class="img-fluid rounded" style="max-height: 300px; max-width: 300px;">
+                </div>
+            {% endif %}
+            <li>Rating:{{item.item_rating}}</li>
+            </ul>
+            <a href="{% url 'item-update' item.pk %}" class="btn btn-primary">Update</a>
+        </div>
+    {% endfor %}
+    <a href="{% url 'add-item'  %}" class="btn btn-primary">Add Item</a>
+
+</div>
+
+{%endblock%}

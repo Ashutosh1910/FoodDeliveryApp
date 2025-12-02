@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.log
+db.sqlite3
+db.sqlite3-journal
+
+# Node
+node_modules/
+dist/
+*.local
+
+# Environment variables
+.env
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Media files (large files)
+media/
+
+# Legacy folder (if you want to keep SUD separately)
+# SUD/
